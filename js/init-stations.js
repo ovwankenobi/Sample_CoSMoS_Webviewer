@@ -93,6 +93,15 @@ var c5_icon = L.icon({
     popupAnchor:  [ 8, 16] // point from which the popup should open relative to the iconAnchor
 });
 
+var sts=_icon = L.icon({
+    iconUrl: 'img/markers/severe_tropical_storm_icon.png',
+    iconSize:     [16, 32], // size of the icon
+    shadowSize:   [36, 84], // size of the shadow
+    iconAnchor:   [ 8, 16], // point of the icon which will correspond to marker's location
+    shadowAnchor: [ 8, 16],  // the same for the shadow
+    popupAnchor:  [ 8, 16] // point from which the popup should open relative to the iconAnchor
+});
+
 var sts_icon = L.icon({
     iconUrl: 'img/markers/severe_tropical_storm_icon.png',
     iconSize:     [16, 32], // size of the icon
