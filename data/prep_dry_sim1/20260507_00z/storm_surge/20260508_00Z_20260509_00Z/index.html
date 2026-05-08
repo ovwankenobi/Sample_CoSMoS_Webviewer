@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<head>
+  <meta http-equiv='content-type' content='text/html; charset=UTF-8' />
+  <script>
+    L_NO_TOUCH = false;
+    L_DISABLE_3D = false;
+  </script>
+  <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+  <script src='https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js'></script>
+  <script src='https://code.jquery.com/jquery-1.12.4.min.js'></script>
+  <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js'></script>
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css'/>
+  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'/>
+  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css'/>
+  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css'/>
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css'/>
+  <link rel='stylesheet' href='https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css'/>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+
+  <style>
+      #map { width: 800px; height: 500px; }
+      .info { padding: 6px 8px; font: 17px/19px Arial, Helvetica, sans-serif; background: white; background: rgba(255,255,255,0.8); box-shadow: 0 0 15px rgba(0,0,0,0.2); border-radius: 5px; } .info h4 { margin: 0 0 5px; color: #777; }
+      .legend     { text-align: center; line-height: 18px; color: #555; } .legend i     { width: 20px; height: 15px; float: left; margin-right: 8px; opacity: 0.7; border-style: solid; border-width: 1px;}
+  </style>
+
+</head>
+<body>
+  <h3> CHT Tiling</h3>
+  <div id='map' style='width: 100%; height: 90%;'></div>
+</body>
+<script>
+
+// Base layers
+var tile_layer_osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+    {'attribution': 'Data by http://openstreetmap.org href=http://www.openstreetmap.org',
+     'detectRetina': false,
+     'maxZoom': 19,
+     'minZoom': 0,
+     'noWrap': false,
+     'opacity': 1,
+     'maxNativeZoom': 13,
+     'subdomains': 'abc',
+     'tms': false});
+var Esri_WorldImagery = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+});
+
+// Data layer
+var tile_layer = L.tileLayer(
+    '{z}/{x}/{y}.png',
+    {'attribution': 'cosmos',
+     'detectRetina': false,
+     'opacity': 0.7,
+     'maxNativeZoom': 9,
+     'maxZoom': 19,
+     'minZoom': 0,
+     'noWrap': false,
+     'subdomains': 'abc',
+     'zIndex':10,
+     'tms': false}
+);
+
+var legend = L.control({position: 'bottomright'});
+legend.onAdd = function (map) {
+        var div = L.DomUtil.create('div', 'info legend')
+        div.innerHTML += 'Legend<br>'
+        return div;
+};
+
+// Map
+var map = L.map('map',{
+    center: [0, 0],
+    crs: L.CRS.EPSG3857,
+    zoom: 2,
+    zoomControl: true,
+    preferCanvas: false,
+    layers: [tile_layer_osm, tile_layer]
+    }
+);
+
+legend.addTo(map);
+
+// Layer control
+var baseMaps = {
+    'Open Street Map': tile_layer_osm,
+    'Satellite': Esri_WorldImagery
+};
+
+var overlayMaps = {};
+
+L.control.layers(baseMaps, overlayMaps).addTo(map);
+
+</script>
